@@ -7,7 +7,7 @@ const imageMimeTypes = ["image/jpeg", "image/png", "image/gif"];
 //All Books Route
 router.get("/", async (req, res) => {
   let query = Book.find();
-  console.log(req.query);
+
   if (req.query.title != null && req.query.title != "") {
     query = query.regex("title", new RegExp(req.query.title, "i"));
   }
@@ -21,6 +21,7 @@ router.get("/", async (req, res) => {
 
   try {
     const books = await query.exec();
+
     res.render("books/index", {
       books: books,
       searchOptions: req.query,
@@ -44,12 +45,12 @@ router.post("/", async (req, res) => {
     pageCount: req.body.pageCount,
     description: req.body.description,
   });
-
   saveCover(book, req.body.cover);
+
   try {
     const newBook = await book.save();
     // res.redirect(`books/${newBook.id}`)
-    res.redirect("books");
+    res.redirect(`books`);
   } catch {
     renderNewPage(res, book, true);
   }
